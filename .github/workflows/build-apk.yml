@@ -25,13 +25,19 @@ jobs:
       - name: Prepare Assets & Build Android
         run: |
           npm install
-          npm install @capacitor/assets
+          npm install @capacitor/assets @capacitor/splash-screen
           npx cap add android
           mkdir -p assets
-          cp logo.png assets/icon-only.png
-          cp logo.png assets/icon-foreground.png
-          cp logo.png assets/splash.png
-          npx capacitor-assets generate --android --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'
+          LOGO_FILE=$(find . -maxdepth 3 -iname "*logo*.png" -o -iname "*khidmatun*.png" | head -n 1)
+          if [ -n "$LOGO_FILE" ]; then
+            echo "Found logo: $LOGO_FILE"
+            cp "$LOGO_FILE" assets/icon-only.png
+            cp "$LOGO_FILE" assets/icon-foreground.png
+            cp "$LOGO_FILE" assets/splash.png
+            npx capacitor-assets generate --android --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'
+          else
+            echo "Logo image not found in repository!"
+          fi
           npx cap sync android
 
       - name: Build Debug APK
