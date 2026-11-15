@@ -1,5 +1,13 @@
 {
   "appId": "com.khidmatunnas.buyer",
   "appName": "খিদমাতুন নাস",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#ffffff",
+      "androidScaleType": "CENTER_INSIDE",
+      "showSpinner": false
+    }
+  }
 }
