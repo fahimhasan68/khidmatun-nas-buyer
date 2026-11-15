@@ -25,7 +25,7 @@ jobs:
       - name: Prepare Assets & Build Android
         run: |
           npm install
-          npm install @capacitor/assets @capacitor/splash-screen
+          npm install @capacitor/assets @capacitor/splash-screen@6
           npx cap add android
           mkdir -p assets
           LOGO_FILE=$(find . -maxdepth 3 -iname "*logo*.png" -o -iname "*khidmatun*.png" | head -n 1)
