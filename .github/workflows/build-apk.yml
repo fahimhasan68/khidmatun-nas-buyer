@@ -34,6 +34,7 @@ jobs:
             cp "$LOGO_FILE" assets/icon-only.png
             cp "$LOGO_FILE" assets/icon-foreground.png
             cp "$LOGO_FILE" assets/splash.png
+            python3 -c "from PIL import Image; Image.new('RGBA', (1024, 1024), (255, 255, 255, 255)).save('assets/icon-background.png')" || cp "$LOGO_FILE" assets/icon-background.png
             npx capacitor-assets generate --android --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'
           else
             echo "Logo image not found in repository!"
