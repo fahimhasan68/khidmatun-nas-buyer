@@ -22,15 +22,24 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Dependencies & Build Android
+      - name: Prepare Assets & Build Android
         run: |
           npm install
+          npm install @capacitor/assets
           npx cap add android
+          mkdir -p assets
+          cp logo.png assets/icon-only.png
+          cp logo.png assets/icon-foreground.png
+          cp logo.png assets/splash.png
+          npx capacitor-assets generate --android --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'
           npx cap sync android
+
+      - name: Build Debug APK
+        run: |
           cd android && chmod +x gradlew && ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: khidmatun-nas-buyer
           path: android/app/build/outputs/apk/debug/app-debug.apk
