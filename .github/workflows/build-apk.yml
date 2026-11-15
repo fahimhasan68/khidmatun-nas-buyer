@@ -28,17 +28,11 @@ jobs:
           npm install @capacitor/assets @capacitor/splash-screen@6
           npx cap add android
           mkdir -p assets
-          LOGO_FILE=$(find . -maxdepth 3 -iname "*logo*.png" -o -iname "*khidmatun*.png" | head -n 1)
-          if [ -n "$LOGO_FILE" ]; then
-            echo "Found logo: $LOGO_FILE"
-            cp "$LOGO_FILE" assets/icon-only.png
-            cp "$LOGO_FILE" assets/icon-foreground.png
-            cp "$LOGO_FILE" assets/splash.png
-            python3 -c "from PIL import Image; Image.new('RGBA', (1024, 1024), (255, 255, 255, 255)).save('assets/icon-background.png')" || cp "$LOGO_FILE" assets/icon-background.png
-            npx capacitor-assets generate --android --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'
-          else
-            echo "Logo image not found in repository!"
-          fi
+          cp logo.png assets/icon-only.png
+          cp logo.png assets/icon-foreground.png
+          cp logo.png assets/icon-background.png
+          cp logo.png assets/splash.png
+          npx capacitor-assets generate --android
           npx cap sync android
 
       - name: Build Debug APK
