@@ -23,7 +23,6 @@
   <header class="sticky top-0 z-40 bg-emerald-950 text-white shadow-md">
     <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <!-- খিদমাতুন নাস লোগো -->
         <div class="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow shrink-0 overflow-hidden">
           <img src="logo.png" alt="খিদমাতুন নাস" class="w-full h-full object-contain">
         </div>
@@ -53,7 +52,7 @@
           ✨ বিশুদ্ধতার বিশ্বস্ত ঠিকানা
         </span>
         <h2 class="text-xl font-bold mb-1">প্রাকৃতিক চাকের মধু ও অ্যালকোহল মুক্ত আতর</h2>
-        <p class="text-xs text-emerald-100/90">সরাসরি বিকাশ/নগদ সেন্ড মানির মাধ্যমে সহজেই অর্ডার করুন।</p>
+        <p class="text-xs text-emerald-100/90">খুলনায় ক্যাশ অন ডেলিভারি এবং সারা বাংলাদেশে কুরিয়ার সুবিধা।</p>
       </div>
       <div class="absolute -right-4 -bottom-6 text-7xl opacity-15">🕌</div>
     </div>
@@ -87,11 +86,11 @@
     </button>
   </div>
 
-  <!-- প্রোডাক্ট ডিটেইলস ও মাল্টিপল ইমেজ গ্যালারি মোডাল -->
+  <!-- প্রোডাক্ট ডিটেইলস ও ভ্যারিয়েন্ট সিলেকশন মোডাল -->
   <div id="productDetailModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-end sm:items-center justify-center">
     <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col overflow-hidden">
       <div class="p-3.5 border-b border-slate-100 flex justify-between items-center">
-        <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg" id="detailCatBadge">পণ্য বিবরণ</span>
+        <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg">পণ্য বিবরণ ও পরিমাণ নির্বাচন</span>
         <button onclick="closeModal('productDetailModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold">✕</button>
       </div>
       <div class="p-4 overflow-y-auto space-y-4">
@@ -107,7 +106,14 @@
             <span id="detailSalePrice" class="text-xl font-bold text-emerald-800"></span>
             <span id="detailOrigPrice" class="text-sm text-slate-400 line-through"></span>
           </div>
-          <p id="detailDesc" class="text-sm text-slate-600 mt-2.5 leading-relaxed whitespace-pre-line"></p>
+
+          <!-- ভ্যারিয়েন্ট / ওজন সিলেকশন বক্স -->
+          <div id="detailVariantSection" class="mt-3 pt-3 border-t border-slate-100">
+            <label class="block text-xs font-bold text-slate-700 mb-2">পরিমাণ / সাইজ নির্বাচন করুন:</label>
+            <div id="detailVariantButtons" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <p id="detailDesc" class="text-sm text-slate-600 mt-3 leading-relaxed whitespace-pre-line"></p>
         </div>
       </div>
       <div class="p-4 border-t border-slate-100 bg-slate-50">
@@ -122,7 +128,7 @@
   <div id="cartModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center">
     <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col overflow-hidden">
       <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-emerald-950 text-white">
-        <h3 class="font-bold text-base">🛒 আপনার শপিং কার্ট ও পেমেন্ট</h3>
+        <h3 class="font-bold text-base">🛒 আপনার শপিং কার্ট ও চেকআউট</h3>
         <button onclick="closeModal('cartModal')" class="w-8 h-8 rounded-full bg-emerald-800 text-white font-bold">✕</button>
       </div>
 
@@ -130,36 +136,66 @@
         <div id="cartItemsContainer" class="space-y-2.5"></div>
 
         <div id="checkoutSection" class="space-y-4 pt-2 border-t border-slate-200">
+          <!-- ডেলিভারি এলাকা ড্রপডাউন -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">ডেলিভারি এলাকা নির্বাচন করুন *</label>
-            <div class="grid grid-cols-2 gap-2">
-              <label class="border rounded-xl p-2.5 flex items-center gap-2 cursor-pointer text-xs font-medium has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50">
-                <input type="radio" name="deliveryArea" value="inside" checked onchange="updateCartSummary()" class="accent-emerald-700">
-                <span>শহরের ভেতরে (৳<span id="insideChargeText">60</span>)</span>
-              </label>
-              <label class="border rounded-xl p-2.5 flex items-center gap-2 cursor-pointer text-xs font-medium has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50">
-                <input type="radio" name="deliveryArea" value="outside" onchange="updateCartSummary()" class="accent-emerald-700">
-                <span>সারা বাংলাদেশ (৳<span id="outsideChargeText">120</span>)</span>
-              </label>
+            <select id="deliveryAreaSelect" onchange="handleDeliveryAreaChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-600">
+              <option value="khulna">খুলনা</option>
+              <option value="outside">খুলনার বাইরে</option>
+            </select>
+
+            <!-- খুলনার জন্য বিশেষ দ্রষ্টব্য -->
+            <div id="khulnaFreeNote" class="mt-2 bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-[11px] text-emerald-900 font-semibold">
+              * বিশেষ দ্রষ্টব্য: ফুলবাড়ীগেট ও দৌলতপুর এলাকায় ফ্রি ডেলিভারি।
             </div>
           </div>
 
+          <!-- বিলের হিসাব -->
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
             <div class="flex justify-between text-slate-600"><span>পণ্যের মোট দাম:</span><span id="subTotalText">৳০</span></div>
             <div class="flex justify-between text-slate-600"><span>ডেলিভারি চার্জ:</span><span id="deliveryFeeText">৳৬০</span></div>
             <div class="flex justify-between font-bold text-sm text-emerald-900 pt-1.5 border-t border-slate-200">
-              <span>সর্বমোট পরিশোধযোগ্য:</span><span id="grandTotalText">৳০</span>
+              <span>সর্বমোট বিল:</span><span id="grandTotalText">৳০</span>
             </div>
           </div>
 
-          <div class="bg-pink-50/70 border border-pink-200 rounded-2xl p-3.5 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-pink-800">💳 সরাসরি Send Money করুন</span>
-              <span class="text-[11px] bg-pink-600 text-white px-2 py-0.5 rounded font-semibold">কোনো চার্জ নেই</span>
+          <!-- পেমেন্ট মেথড নির্বাচন (COD বনাম Full Online Payment) -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">পেমেন্ট পদ্ধতি নির্বাচন করুন *</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="border rounded-xl p-2.5 flex items-center gap-2 cursor-pointer text-xs font-bold has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50">
+                <input type="radio" name="paymentType" value="cod" checked onchange="updateCheckoutPaymentUI()" class="accent-emerald-700">
+                <span>💵 ক্যাশ অন ডেলিভারি</span>
+              </label>
+              <label class="border rounded-xl p-2.5 flex items-center gap-2 cursor-pointer text-xs font-bold has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50">
+                <input type="radio" name="paymentType" value="full_online" onchange="updateCheckoutPaymentUI()" class="accent-emerald-700">
+                <span>💳 বিকাশ / নগদ পেমেন্ট</span>
+              </label>
             </div>
-            <p class="text-xs text-slate-700 leading-relaxed">
+          </div>
+
+          <!-- খুলনা COD নোটিশ (কোনো অগ্রিম লাগবে না) -->
+          <div id="khulnaCodBox" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 text-xs text-emerald-900 font-medium">
+            ✅ খুলনার ভেতরে ক্যাশ অন ডেলিভারিতে কোনো অগ্রিম পেমেন্ট করতে হবে না। পণ্য হাতে পেয়ে সম্পূর্ণ টাকা পরিশোধ করবেন।
+          </div>
+
+          <!-- বিকাশ / নগদ পেমেন্ট বক্স (খুলনার বাইরে COD-তে ১০০ টাকা অগ্রিম অথবা ফুল পেমেন্ট) -->
+          <div id="mobilePaymentBox" class="hidden bg-pink-50/80 border border-pink-200 rounded-2xl p-3.5 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-pink-800" id="mobilePayTitle">💳 বিকাশ / নগদ Send Money</span>
+              <span class="text-[11px] bg-pink-600 text-white px-2 py-0.5 rounded font-semibold" id="mobilePayBadge">অগ্রিম পেমেন্ট</span>
+            </div>
+
+            <!-- খুলনার বাইরে ১০০ টাকা অগ্রিমের বিশেষ বার্তা -->
+            <div id="outsideAdvanceNotice" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-2.5 text-[11px] text-amber-950 leading-relaxed font-medium">
+              ⚠️ <strong>অর্ডার করে অর্ডার রিসিভ না করার বিড়ম্বনা এড়ানোর জন্যই ৳১০০ অগ্রিম গ্রহণ করা হচ্ছে।</strong><br>
+              নিচের নাম্বারে <strong>৳১০০ অগ্রিম পেমেন্ট করুন বিকাশ বা নগদে</strong> এবং বাকি <strong id="remainingDueText">৳০</strong> পণ্য হাতে পেয়ে পরিশোধ করবেন।
+            </div>
+
+            <p id="fullPayInstruction" class="hidden text-xs text-slate-700 leading-relaxed">
               নিচের যেকোনো পার্সোনাল নাম্বারে মোট <strong class="text-pink-700" id="payAmountHint">৳০</strong> <strong>Send Money</strong> করে ট্রানজেকশন আইডি (TrxID) নিচে দিন:
             </p>
+
             <div class="space-y-1.5 text-xs">
               <div class="flex items-center justify-between bg-white px-3 py-2 rounded-lg border border-pink-100">
                 <span><strong class="text-pink-600">bKash:</strong> <span id="displayBkash" class="font-mono font-bold">01700-000000</span></span>
@@ -181,17 +217,18 @@
             </div>
           </div>
 
+          <!-- ক্রেতার তথ্য -->
           <div class="space-y-2.5">
             <input type="text" id="custName" placeholder="আপনার পূর্ণ নাম *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs">
             <input type="tel" id="custPhone" placeholder="আপনার মোবাইল নাম্বার (যেমন: 017...) *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs">
-            <textarea id="custAddress" rows="2" placeholder="পূর্ণ ঠিকানা (বাসা/রোড, থানা, জেলা) *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs"></textarea>
+            <textarea id="custAddress" rows="2" placeholder="পূর্ণ ঠিকানা (বাসা/রোড, এলাকা, থানা, জেলা) *" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs"></textarea>
           </div>
         </div>
       </div>
 
       <div id="cartFooter" class="p-4 border-t border-slate-100 bg-slate-50">
         <button onclick="submitOrder()" id="confirmOrderBtn" class="w-full py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-lg">
-          ✅ পেমেন্ট সম্পন্ন ও অর্ডার কনফার্ম করুন
+          ✅ অর্ডার কনফার্ম করুন
         </button>
       </div>
     </div>
@@ -203,7 +240,7 @@
       <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 text-3xl flex items-center justify-center mx-auto">✅</div>
       <h3 class="text-xl font-bold text-emerald-950">আলহামদুলিল্লাহ! আপনার অর্ডারটি কনফার্ম করা হয়েছে</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
-        আপনার পেমেন্ট তথ্য সফলভাবে জমা হয়েছে। কিছুক্ষণের মধ্যেই আমাদের প্রতিনিধি আপনাকে ফোন করে অর্ডারটি নিশ্চিত করবেন।
+        আপনার অর্ডার তথ্য সফলভাবে জমা হয়েছে। কিছুক্ষণের মধ্যেই আমাদের প্রতিনিধি আপনাকে ফোন করে অর্ডারটি নিশ্চিত করবেন।
       </p>
       <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1">
         <div class="text-slate-500">অর্ডার আইডি</div>
@@ -245,10 +282,22 @@
 
     let cart = JSON.parse(localStorage.getItem('kn_buyer_cart') || '[]');
     let currentCategory = 'all';
+    let selectedVariantsMap = {}; // প্রতিটি প্রোডাক্ট কার্ডে কোন ভ্যারিয়েন্ট সিলেক্ট করা আছে তা ট্র্যাক করার জন্য
 
     function bnNum(n) {
       if (n === null || n === undefined || n === '') return '';
       return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+    }
+
+    function getProductVariants(p) {
+      if (p.variants && Array.isArray(p.variants) && p.variants.length > 0) {
+        return p.variants;
+      }
+      return [{
+        label: p.defaultUnit || '১ পিস / স্ট্যান্ডার্ড',
+        originalPrice: Number(p.originalPrice) || 0,
+        salePrice: Number(p.salePrice) || 0
+      }];
     }
 
     async function syncFromCloud() {
@@ -273,8 +322,10 @@
       document.getElementById('headerStoreName').innerText = storeData.settings.storeName;
       document.getElementById('displayBkash').innerText = storeData.settings.bkash;
       document.getElementById('displayNagad').innerText = storeData.settings.nagad;
-      document.getElementById('insideChargeText').innerText = bnNum(storeData.settings.insideCharge);
-      document.getElementById('outsideChargeText').innerText = bnNum(storeData.settings.outsideCharge);
+
+      const areaSelect = document.getElementById('deliveryAreaSelect');
+      areaSelect.options[0].text = 'খুলনা (ডেলিভারি চার্জ ৳' + bnNum(storeData.settings.insideCharge) + ')';
+      areaSelect.options[1].text = 'খুলনার বাইরে (ডেলিভারি চার্জ ৳' + bnNum(storeData.settings.outsideCharge) + ')';
     }
 
     function setCategory(cat, btnEl) {
@@ -287,6 +338,12 @@
         btnEl.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
         btnEl.classList.add('bg-emerald-800', 'text-white');
       }
+      renderProducts();
+    }
+
+    function selectCardVariant(productId, variantIdx, event) {
+      if (event) event.stopPropagation();
+      selectedVariantsMap[productId] = variantIdx;
       renderProducts();
     }
 
@@ -307,8 +364,12 @@
 
       grid.innerHTML = filtered.map(p => {
         const imgs = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : ['https://placehold.co/400x400/064e3b/fbbf24?text=Khidmatun+Nas']);
-        const orig = Number(p.originalPrice) || 0;
-        const sale = Number(p.salePrice) || 0;
+        const variants = getProductVariants(p);
+        const activeIdx = (selectedVariantsMap[p.id] !== undefined && variants[selectedVariantsMap[p.id]]) ? selectedVariantsMap[p.id] : 0;
+        const activeVar = variants[activeIdx];
+
+        const orig = Number(activeVar.originalPrice) || 0;
+        const sale = Number(activeVar.salePrice) || 0;
         const hasDiscount = orig > sale && sale > 0;
         const discountPct = hasDiscount ? Math.round(((orig - sale) / orig) * 100) : 0;
 
@@ -324,6 +385,17 @@
           ? '<span class="text-xs text-slate-400 line-through whitespace-nowrap">৳' + bnNum(orig) + '</span>'
           : '';
 
+        // ভ্যারিয়েন্ট বাটন (যদি একাধিক ভ্যারিয়েন্ট থাকে অথবা ১টির নাম দেওয়া থাকে)
+        const variantPillsHtml = (variants.length > 1 || (variants[0] && variants[0].label !== '১ পিস / স্ট্যান্ডার্ড'))
+          ? '<div class="mt-2 flex flex-wrap gap-1">' +
+              variants.map((v, idx) =>
+                '<button type="button" onclick="selectCardVariant(\'' + p.id + '\', ' + idx + ', event)" class="px-2 py-0.5 rounded-md text-[10px] font-bold border transition ' +
+                (idx === activeIdx ? 'bg-emerald-800 text-white border-emerald-800' : 'bg-slate-50 text-slate-700 border-slate-200') + '">' +
+                v.label + '</button>'
+              ).join('') +
+            '</div>'
+          : '';
+
         return (
           '<div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs flex flex-col justify-between">' +
             '<div onclick="openProductDetail(\'' + p.id + '\')" class="cursor-pointer">' +
@@ -334,6 +406,7 @@
               '</div>' +
               '<div class="p-3 pb-1">' +
                 '<h3 class="font-bold text-xs sm:text-sm text-slate-800 line-clamp-2 leading-snug">' + p.name + '</h3>' +
+                variantPillsHtml +
                 '<div class="mt-1.5 flex items-baseline flex-wrap gap-1.5">' +
                   '<span class="text-sm sm:text-base font-bold text-emerald-800 whitespace-nowrap">৳' + bnNum(sale) + '</span>' +
                   origPriceHtml +
@@ -341,7 +414,7 @@
               '</div>' +
             '</div>' +
             '<div class="p-3 pt-2">' +
-              '<button onclick="addToCart(\'' + p.id + '\')" class="w-full py-2 rounded-xl bg-emerald-800 hover:bg-emerald-900 active:scale-95 transition text-white text-xs font-bold">' +
+              '<button onclick="addToCart(\'' + p.id + '\', ' + activeIdx + ')" class="w-full py-2 rounded-xl bg-emerald-800 hover:bg-emerald-900 active:scale-95 transition text-white text-xs font-bold">' +
                 '+ কার্টে যোগ করুন' +
               '</button>' +
             '</div>' +
@@ -354,24 +427,12 @@
       const p = storeData.products.find(x => x && x.id === id);
       if (!p) return;
       const imgs = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : ['https://placehold.co/400x400/064e3b/fbbf24?text=Khidmatun+Nas']);
-      const orig = Number(p.originalPrice) || 0;
-      const sale = Number(p.salePrice) || 0;
-      const hasDiscount = orig > sale && sale > 0;
+      const variants = getProductVariants(p);
+      let activeIdx = (selectedVariantsMap[p.id] !== undefined && variants[selectedVariantsMap[p.id]]) ? selectedVariantsMap[p.id] : 0;
 
       document.getElementById('detailMainImg').src = imgs[0];
       document.getElementById('detailTitle').innerText = p.name;
-      document.getElementById('detailSalePrice').innerText = '৳' + bnNum(sale);
-      document.getElementById('detailOrigPrice').innerText = hasDiscount ? ('৳' + bnNum(orig)) : '';
       document.getElementById('detailDesc').innerText = p.description || "শতভাগ খাঁটি ও প্রাকৃতিক পণ্য।";
-
-      const badge = document.getElementById('detailDiscountBadge');
-      if (hasDiscount) {
-        const pct = Math.round(((orig - sale) / orig) * 100);
-        badge.innerText = '-' + bnNum(pct) + '% ছাড়';
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
-      }
 
       const thumbsDiv = document.getElementById('detailThumbnails');
       if (imgs.length > 1) {
@@ -383,31 +444,81 @@
         thumbsDiv.classList.add('hidden');
       }
 
-      document.getElementById('detailAddBtn').onclick = () => {
-        addToCart(p.id);
-        closeModal('productDetailModal');
-      };
+      function renderDetailVariantState() {
+        const v = variants[activeIdx];
+        const orig = Number(v.originalPrice) || 0;
+        const sale = Number(v.salePrice) || 0;
+        const hasDiscount = orig > sale && sale > 0;
+
+        document.getElementById('detailSalePrice').innerText = '৳' + bnNum(sale);
+        document.getElementById('detailOrigPrice').innerText = hasDiscount ? ('৳' + bnNum(orig)) : '';
+
+        const badge = document.getElementById('detailDiscountBadge');
+        if (hasDiscount) {
+          const pct = Math.round(((orig - sale) / orig) * 100);
+          badge.innerText = '-' + bnNum(pct) + '% ছাড়';
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+
+        const varBtnsDiv = document.getElementById('detailVariantButtons');
+        varBtnsDiv.innerHTML = variants.map((item, idx) =>
+          '<button type="button" data-vidx="' + idx + '" class="detail-var-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition ' +
+          (idx === activeIdx ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200') + '">' +
+          item.label + ' — ৳' + bnNum(item.salePrice) + '</button>'
+        ).join('');
+
+        varBtnsDiv.querySelectorAll('.detail-var-btn').forEach(btn => {
+          btn.onclick = () => {
+            activeIdx = Number(btn.getAttribute('data-vidx'));
+            selectedVariantsMap[p.id] = activeIdx;
+            renderProducts();
+            renderDetailVariantState();
+          };
+        });
+
+        document.getElementById('detailAddBtn').onclick = () => {
+          addToCart(p.id, activeIdx);
+          closeModal('productDetailModal');
+        };
+      }
+
+      renderDetailVariantState();
       document.getElementById('productDetailModal').classList.remove('hidden');
     }
 
-    function addToCart(productId) {
+    function addToCart(productId, variantIdx = 0) {
       const prod = storeData.products.find(p => p && p.id === productId);
       if (!prod) return;
-      const existing = cart.find(c => c.id === productId);
-      if (existing) existing.qty += 1;
-      else {
+      const variants = getProductVariants(prod);
+      const chosenVar = variants[variantIdx] || variants[0];
+      const cartKey = productId + '__' + chosenVar.label;
+
+      const existing = cart.find(c => c.cartKey === cartKey);
+      if (existing) {
+        existing.qty += 1;
+      } else {
         const thumb = (prod.images && prod.images[0]) || prod.image || '';
-        cart.push({ id: prod.id, name: prod.name, price: Number(prod.salePrice), image: thumb, qty: 1 });
+        cart.push({
+          cartKey: cartKey,
+          id: prod.id,
+          name: prod.name,
+          variantLabel: chosenVar.label,
+          price: Number(chosenVar.salePrice),
+          image: thumb,
+          qty: 1
+        });
       }
       localStorage.setItem('kn_buyer_cart', JSON.stringify(cart));
       updateCartUI();
     }
 
-    function changeQty(id, delta) {
-      const item = cart.find(c => c.id === id);
+    function changeQty(cartKey, delta) {
+      const item = cart.find(c => (c.cartKey || c.id) === cartKey);
       if (!item) return;
       item.qty += delta;
-      if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+      if (item.qty <= 0) cart = cart.filter(c => (c.cartKey || c.id) !== cartKey);
       localStorage.setItem('kn_buyer_cart', JSON.stringify(cart));
       updateCartUI();
       renderCartItems();
@@ -433,6 +544,7 @@
 
     function openCartModal() {
       renderCartItems();
+      handleDeliveryAreaChange();
       document.getElementById('cartModal').classList.remove('hidden');
     }
 
@@ -450,35 +562,88 @@
       checkoutSec.classList.remove('hidden');
       footer.classList.remove('hidden');
 
-      container.innerHTML = cart.map(item =>
-        '<div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200">' +
-          '<div class="flex items-center gap-2.5">' +
-            '<img src="' + item.image + '" class="w-11 h-11 rounded-lg object-cover bg-white">' +
-            '<div>' +
-              '<h4 class="text-xs font-bold text-slate-800">' + item.name + '</h4>' +
-              '<span class="text-xs text-emerald-700 font-semibold">৳' + bnNum(item.price) + ' × ' + bnNum(item.qty) + '</span>' +
+      container.innerHTML = cart.map(item => {
+        const key = item.cartKey || item.id;
+        const varBadge = item.variantLabel ? '<span class="inline-block bg-emerald-100 text-emerald-900 text-[10px] font-bold px-1.5 py-0.5 rounded ml-1">' + item.variantLabel + '</span>' : '';
+        return (
+          '<div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200">' +
+            '<div class="flex items-center gap-2.5">' +
+              '<img src="' + item.image + '" class="w-11 h-11 rounded-lg object-cover bg-white">' +
+              '<div>' +
+                '<h4 class="text-xs font-bold text-slate-800">' + item.name + varBadge + '</h4>' +
+                '<span class="text-xs text-emerald-700 font-semibold">৳' + bnNum(item.price) + ' × ' + bnNum(item.qty) + ' = ৳' + bnNum(item.price * item.qty) + '</span>' +
+              '</div>' +
             '</div>' +
-          '</div>' +
-          '<div class="flex items-center gap-1.5">' +
-            '<button onclick="changeQty(\'' + item.id + '\', -1)" class="w-7 h-7 rounded-lg bg-white border font-bold text-sm">-</button>' +
-            '<span class="text-xs font-bold w-5 text-center">' + bnNum(item.qty) + '</span>' +
-            '<button onclick="changeQty(\'' + item.id + '\', 1)" class="w-7 h-7 rounded-lg bg-emerald-800 text-white font-bold text-sm">+</button>' +
-          '</div>' +
-        '</div>'
-      ).join('');
+            '<div class="flex items-center gap-1.5">' +
+              '<button onclick="changeQty(\'' + key + '\', -1)" class="w-7 h-7 rounded-lg bg-white border font-bold text-sm">-</button>' +
+              '<span class="text-xs font-bold w-5 text-center">' + bnNum(item.qty) + '</span>' +
+              '<button onclick="changeQty(\'' + key + '\', 1)" class="w-7 h-7 rounded-lg bg-emerald-800 text-white font-bold text-sm">+</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+      updateCartSummary();
+    }
+
+    function handleDeliveryAreaChange() {
+      const area = document.getElementById('deliveryAreaSelect').value;
+      const khulnaNote = document.getElementById('khulnaFreeNote');
+      if (area === 'khulna') {
+        khulnaNote.classList.remove('hidden');
+      } else {
+        khulnaNote.classList.add('hidden');
+      }
       updateCartSummary();
     }
 
     function updateCartSummary() {
       const subTotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const area = document.querySelector('input[name="deliveryArea"]:checked')?.value || 'inside';
-      const deliveryFee = area === 'inside' ? Number(storeData.settings.insideCharge) : Number(storeData.settings.outsideCharge);
+      const area = document.getElementById('deliveryAreaSelect').value;
+      const deliveryFee = area === 'khulna' ? Number(storeData.settings.insideCharge) : Number(storeData.settings.outsideCharge);
       const grandTotal = subTotal + deliveryFee;
 
       document.getElementById('subTotalText').innerText = '৳' + bnNum(subTotal);
-      document.getElementById('deliveryFeeText').innerText = '৳' + bnNum(deliveryFee);
+      document.getElementById('deliveryFeeText').innerText = area === 'khulna'
+        ? ('৳' + bnNum(deliveryFee) + ' (ফুলবাড়ীগেট ও দৌলতপুরে ফ্রি)')
+        : ('৳' + bnNum(deliveryFee));
       document.getElementById('grandTotalText').innerText = '৳' + bnNum(grandTotal);
       document.getElementById('payAmountHint').innerText = '৳' + bnNum(grandTotal);
+
+      const dueAfterAdvance = Math.max(0, grandTotal - 100);
+      document.getElementById('remainingDueText').innerText = '৳' + bnNum(dueAfterAdvance);
+
+      updateCheckoutPaymentUI();
+    }
+
+    function updateCheckoutPaymentUI() {
+      const area = document.getElementById('deliveryAreaSelect').value;
+      const payType = document.querySelector('input[name="paymentType"]:checked')?.value || 'cod';
+
+      const khulnaCodBox = document.getElementById('khulnaCodBox');
+      const mobilePayBox = document.getElementById('mobilePaymentBox');
+      const outsideAdvNotice = document.getElementById('outsideAdvanceNotice');
+      const fullPayInstr = document.getElementById('fullPayInstruction');
+      const mobilePayTitle = document.getElementById('mobilePayTitle');
+      const mobilePayBadge = document.getElementById('mobilePayBadge');
+
+      if (area === 'khulna' && payType === 'cod') {
+        khulnaCodBox.classList.remove('hidden');
+        mobilePayBox.classList.add('hidden');
+      } else if (area === 'outside' && payType === 'cod') {
+        khulnaCodBox.classList.add('hidden');
+        mobilePayBox.classList.remove('hidden');
+        outsideAdvNotice.classList.remove('hidden');
+        fullPayInstr.classList.add('hidden');
+        mobilePayTitle.innerText = '💳 ৳১০০ অগ্রিম পেমেন্ট করুন (বিকাশ / নগদ)';
+        mobilePayBadge.innerText = '৳১০০ অগ্রিম';
+      } else {
+        khulnaCodBox.classList.add('hidden');
+        mobilePayBox.classList.remove('hidden');
+        outsideAdvNotice.classList.add('hidden');
+        fullPayInstr.classList.remove('hidden');
+        mobilePayTitle.innerText = '💳 সম্পূর্ণ বিল Send Money করুন';
+        mobilePayBadge.innerText = 'ফুল পেমেন্ট';
+      }
     }
 
     function copyNumber(type) {
@@ -491,19 +656,46 @@
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
+      const area = document.getElementById('deliveryAreaSelect').value;
+      const payType = document.querySelector('input[name="paymentType"]:checked').value;
       const payMethod = document.getElementById('payMethod').value;
       const trxId = document.getElementById('trxIdInput').value.trim().toUpperCase();
 
       if (!name || !phone || !address) return alert("অনুগ্রহ করে আপনার নাম, মোবাইল নাম্বার এবং ঠিকানা পূরণ করুন।");
-      if (!trxId) return alert("অনুগ্রহ করে পেমেন্টের ট্রানজেকশন আইডি (TrxID) লিখুন।");
+
+      const needsTrx = !(area === 'khulna' && payType === 'cod');
+      if (needsTrx && !trxId) {
+        return alert(area === 'outside' && payType === 'cod'
+          ? "খুলনার বাইরে ক্যাশ অন ডেলিভারির জন্য ৳১০০ অগ্রিম পাঠিয়ে ট্রানজেকশন আইডি (TrxID) দিন।"
+          : "অনুগ্রহ করে পেমেন্টের ট্রানজেকশন আইডি (TrxID) লিখুন।");
+      }
 
       const btn = document.getElementById('confirmOrderBtn');
       btn.disabled = true;
       btn.innerText = "অর্ডার জমা হচ্ছে...";
 
       const subTotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const area = document.querySelector('input[name="deliveryArea"]:checked').value;
-      const deliveryFee = area === 'inside' ? Number(storeData.settings.insideCharge) : Number(storeData.settings.outsideCharge);
+      const deliveryFee = area === 'khulna' ? Number(storeData.settings.insideCharge) : Number(storeData.settings.outsideCharge);
+      const grandTotal = subTotal + deliveryFee;
+
+      let paymentSummaryLabel = '';
+      let paidAdvance = 0;
+      let dueAmount = grandTotal;
+
+      if (area === 'khulna' && payType === 'cod') {
+        paymentSummaryLabel = 'Cash on Delivery (খুলনা - অগ্রিম ছাড়া)';
+        paidAdvance = 0;
+        dueAmount = grandTotal;
+      } else if (area === 'outside' && payType === 'cod') {
+        paymentSummaryLabel = 'COD + ৳১০০ অগ্রিম (' + payMethod + ')';
+        paidAdvance = 100;
+        dueAmount = Math.max(0, grandTotal - 100);
+      } else {
+        paymentSummaryLabel = 'Full Paid (' + payMethod + ')';
+        paidAdvance = grandTotal;
+        dueAmount = 0;
+      }
+
       const orderId = "KN-" + Math.floor(1000 + Math.random() * 9000);
 
       const newOrder = {
@@ -512,10 +704,13 @@
         customerName: name,
         customerPhone: phone,
         customerAddress: address,
-        paymentMethod: payMethod,
-        trxId: trxId,
+        deliveryZone: area === 'khulna' ? 'খুলনা' : 'খুলনার বাইরে',
+        paymentMethod: paymentSummaryLabel,
+        trxId: needsTrx ? trxId : 'N/A (COD)',
+        paidAdvance: paidAdvance,
+        dueAmount: dueAmount,
         items: [...cart],
-        totalAmount: subTotal + deliveryFee,
+        totalAmount: grandTotal,
         status: "Pending"
       };
 
@@ -537,7 +732,7 @@
         alert("ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
       } finally {
         btn.disabled = false;
-        btn.innerText = "✅ পেমেন্ট সম্পন্ন ও অর্ডার কনফার্ম করুন";
+        btn.innerText = "✅ অর্ডার কনফার্ম করুন";
       }
     }
 
@@ -567,9 +762,9 @@
             '<span class="text-emerald-900">#' + o.id + '</span>' +
             '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800">' + o.status + '</span>' +
           '</div>' +
-          '<div class="text-slate-600">' + o.items.map(i => i.name + ' (' + bnNum(i.qty) + 'টি)').join(', ') + '</div>' +
+          '<div class="text-slate-600">' + o.items.map(i => i.name + (i.variantLabel ? ' [' + i.variantLabel + ']' : '') + ' × ' + bnNum(i.qty)).join(', ') + '</div>' +
           '<div class="flex justify-between pt-1 border-t font-semibold">' +
-            '<span>' + o.paymentMethod + ' (' + o.trxId + ')</span>' +
+            '<span>' + o.paymentMethod + '</span>' +
             '<span>মোট: ৳' + bnNum(o.totalAmount) + '</span>' +
           '</div>' +
         '</div>'
